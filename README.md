@@ -38,12 +38,15 @@ Avec quelques adaptations **mineures**, vous pourrez adapter cette configuration
 
 ## Instructions d'installation
 
-### installation home
+### installation esphome
 
 Plusieurs façons pour installer esphome sur votre carte esp8266 ou autre. Cela peut être via home assistant mais aussi directement depuis votre pc.
 
 Concrètement, sous home assistant, ajouter le composant "ESPHome Device Builder", puis ouvrir "l'interface utilisateur web". Voici un guide : https://www.hacf.fr/esphome-introduction/
 
+### flash du firmware
+
+Avec ESPHome flasher le firmware basee sur le fichier yaml suivant : sonoff-esp-diverter.yaml & secrets.yaml
 
 ### première mise sous tension :
 
