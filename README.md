@@ -46,7 +46,7 @@ Concrètement, sous home assistant, ajouter le composant "ESPHome Device Builder
 
 ### flash du firmware
 
-Avec ESPHome flasher le firmware basee sur le fichier yaml suivant : sonoff-esp-diverter.yaml & secrets.yaml
+Avec ESPHome flasher le firmware basé sur le fichier yaml suivant : sonoff-esp-diverter.yaml & secrets.yaml
 
 ### première mise sous tension :
 
