@@ -1,4 +1,4 @@
-# Configuration web ou **HA** pour **Diverter**
+# Interface wifi web **autonome** ou **HA** pour **Diverter**
 
 - [Introduction](#Introduction)
 - [Fonctionnalités](#Fonctionnalités)
@@ -34,4 +34,4 @@ Avec quelques adaptations **mineures**, vous pourrez adapter cette configuration
 ## Instructions d'installation
 
 Pas d'obligation de renseigner vos paramètres Wi-Fi dans la configuration.
-Une fois flashé, si votre configuration Wi-Fi n'est pas faite, un hotspot Wi-Fi est activé. Connectez-vous sur ce hotspot et configurez votre Wi-Fi local.
+Une fois flashé, si votre configuration Wi-Fi n'est pas faite, un hotspot Wi-Fi est activé. Connectez-vous sur ce hotspot et configurez votre Wi-Fi local, ssid et password.
