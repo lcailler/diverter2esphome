@@ -1,0 +1,312 @@
+
+esphome:
+  name: sonoff-esp-diverter
+
+esp8266:         # device definition   -> https://devices.esphome.io/standards/global
+  board: esp8285 #   board  definition -> https://devices.esphome.io/devices/Sonoff-BASIC-R2-v1.4
+  restore_from_flash : true
+
+preferences:     # https://forum.hacf.fr/t/maintien-et-sauvegarde-des-donnees-sur-esp-avec-esphome/55999/5
+  flash_write_interval: 60s # https://esphome.io/components/esphome/#preferences-component
+
+
+# = ENABLE Home Assistant API (optional) ===============
+api:
+  password: ""
+
+
+# = HTTP SERVER ========================================
+
+# Serveur web intégré
+web_server: # https://esphome.io/components/web_server/
+  version: 3
+  port: 80
+  include_internal: true
+  ota: false
+  log: false
+  local: false
+
+# = Enable LOGGING =====================================
+logger:
+  level: VERBOSE #makes uart stream available in esphome logstream
+  baud_rate: 0 #disable logging over uartE
+  tx_buffer_size : 2000
+
+# = Enable OTA updates =================================
+#ota:
+#  - platform: esphome
+#    password: ""
+
+
+
+
+# ==== INDICATION D'ETAT DU WIFI VIA LA LED ========================================
+# ==== connection wifi     établie -> LED allumée et clignotante
+# ==== connection wifi non établie -> LED allumée fixe
+interval:
+  - interval: 2sec # gestion de l'etat de la LED
+    then:
+      if:
+        condition:
+          wifi.connected
+        then:
+          - output.turn_on:  LED_id
+          - delay: 250ms
+          - output.turn_off: LED_id
+        else:
+          - output.turn_on:  LED_id
+
+  - interval: 120sec # gestion d'un reset si plus de reseau wifi
+    startup_delay: 50sec
+    then:
+      if:
+        condition:
+          not:
+            wifi.connected
+        then:
+          - switch.turn_on: Device_Reset_id
+
+
+
+switch:
+# ENABLE HARD RESET =
+  - platform: restart
+    name: "Reset si plus de wifi pendant plus de 2 min"
+    id: Device_Reset_id
+    internal: true
+    restore_mode: ALWAYS_OFF
+
+# MARCHE FORCEE ====
+  - platform: uart
+    id: diverter_marche_force_on_id
+    internal: false
+    name: "marche forcee ECS activation"
+    data: "001_TRIAC_REQUEST_ON\n"
+    send_every: 41s
+
+
+output:
+  - platform: gpio
+    pin: GPIO12
+    id: relay_id
+
+  - platform: gpio
+    pin:
+      number: GPIO13
+      mode: output
+      inverted: true
+    id: LED_id
+
+
+# UART & CORRESPONDING SENSOR =
+
+uart:
+  id: diverterUART_id
+  tx_pin: GPIO1
+  rx_pin: GPIO3
+  baud_rate: 9600
+  rx_buffer_size: 2000
+  debug:
+    direction: RX
+    dummy_receiver: true
+    after:
+      #delimiter: "\r\n"
+      bytes: 2000
+    sequence:
+      - lambda: |-
+            bytes[bytes.size()-1]=0;
+            const char* char_ptr = (const char*)&bytes[0]; /* char_ptr permet de reduire la consommation ram en evitant de dupliquer bytes */
+            //ESP_LOGD("uart", "Données reçues: %u %s", bytes.size(), char_ptr);
+            ESP_LOGD("uart", "Received %u bytes:", bytes.size());
+
+            JsonDocument doc;
+            DeserializationError error = deserializeJson(doc, char_ptr);
+            if (error) {
+              ESP_LOGD("uart", "Erreur de parsing JSON: %s", error.c_str());
+              id(            average_power_01min_w_id).publish_state(-10000.0);
+              return;
+            } else {
+              ESP_LOGD("uart", "json decode done OK");
+            }
+
+            // Extraction des champs du JSON
+            if (doc.containsKey("average_power_01min_w")) {
+              float f =     doc["average_power_01min_w"];
+              id(                average_power_01min_w_id).publish_state(f);
+            }
+            if (doc.containsKey("average_div_triac1_power_01min_w")) {
+              float f =     doc["average_div_triac1_power_01min_w"];
+              id(                average_div_triac1_power_01min_w_id).publish_state(f);
+            }
+            if (doc.containsKey("average_lost_power_01min_w")) {
+              float f =     doc["average_lost_power_01min_w"];
+              id(                average_lost_power_01min_w_id).publish_state(f);
+            }
+
+
+
+
+## Envoi de données récurrent
+
+# Envoie un message sur l'UART à récurence fixe
+# https://esphome.io/components/time/index.html
+time:
+  - platform: sntp
+    id: sntp_time_id
+
+    on_time:
+      # Every 30sec
+      - seconds: /30
+        then:
+          - uart.write:
+              id: diverterUART_id
+              data: "DIVERTER_GETJSON\n"
+
+      # Every minute == CALCUL MARCHE FORCEE A PARTIR DE H0 H1 =========
+      - seconds: 0
+        minutes: /1
+        then:
+          - script.execute: update_marche_forcee_status_id
+
+  - platform: homeassistant
+    id: esphome_time_id
+
+# Définition du script partagé
+script:
+  - id: update_marche_forcee_status_id
+    then:
+      - lambda: |-
+              int current_hour = id(sntp_time_id).now().hour;
+              int start_h      = id(depart_ecs_h_id).state;
+              int end_h        = id(fin_ecs_h_id).state;
+
+              if (id(sntp_time_id).now().year<2000){
+                return; /* time is not coherent */
+              }
+
+              if (start_h==end_h){
+                id(marche_forcee_status_id).set_icon("mdi:clock-remove");
+                id(marche_forcee_status_id).publish_state("mode MANEL cf [marche forcee ECS activation]");
+                return; /* marche forcee MANUELLE         */
+              }
+
+              /* marche forcee AUTO controlée par H0 & H1 */
+              id(marche_forcee_status_id).set_icon("mdi:clock-check-outline");
+
+              ESP_LOGD("time", "compute %d<%d<%d y:%d",start_h,current_hour,end_h,id(sntp_time_id).now().year);
+              bool is_on_time = false;
+              if (start_h < end_h) {
+                // Cas simple : l'horaire de début est avant l'horaire de fin (dans la même journée)
+                if (current_hour >= start_h && current_hour < end_h) {
+                  is_on_time = true;
+                }
+              } else if (start_h > end_h) {
+                // Cas complexe : l'horaire de fin est après minuit (sur le jour suivant)
+                if ((current_hour >= start_h) || (current_hour < end_h)) {
+                  is_on_time = true;
+                }
+              }
+
+              if (is_on_time) {
+                id(diverter_marche_force_on_id).turn_on();
+                ESP_LOGD("time", "ON");
+              } else {
+                id(diverter_marche_force_on_id).turn_off();
+                ESP_LOGD("time", "OFF");
+              }
+
+              char s[38];
+              sprintf(s,"mode AUTO de %02dh00 a %02dh00, duree %dh",start_h,end_h,((end_h>start_h) ? (end_h-start_h): (24+end_h-start_h)) );
+              id(marche_forcee_status_id).publish_state(s);
+
+
+sensor:
+  - platform: template # Puissance réelle (compteur EDF), valeur moyenne sur la dernière minute
+    id:    average_power_01min_w_id
+    name: "puissance soutiree a edf"
+    unit_of_measurement: "W"
+
+  - platform: template # puissance divertie à travers le Triac1, valeur moyenne sur la dernière minute
+    id:    average_div_triac1_power_01min_w_id
+    name: "puissance divertie via triac"
+    unit_of_measurement: "W"
+
+  - platform: template # Puissance injectée sur le réseau EDF, valeur moyenne sur la dernière minute
+    id:    average_lost_power_01min_w_id
+    name: "puissance injectee vers edf"
+    unit_of_measurement: "W"
+
+
+  - platform: uptime
+    name: Uptime_Sensor
+    id: uptime_id
+
+  - platform: wifi_signal
+    name: WiFi_Signal_Sensor
+    update_interval: 15s
+    id: sstrength_id
+    icon: "mdi:wifi" # https://mdi.bessarabov.com/
+
+
+text_sensor:
+  - platform: template
+    name: "Heure"
+    lambda: |-
+      char str[17]; time_t currTime = id(esphome_time_id).now().timestamp;
+      strftime(str, sizeof(str), "%Y-%m-%d %H:%M", localtime(&currTime));
+      return  { str };
+    update_interval: 60s
+
+  - platform: template
+    name: "marche forcee ECS status"
+    id: marche_forcee_status_id
+
+# Example configuration entry
+number:
+  - platform: template
+    name: "H0 Heure depart marche forcee ECS"
+    id: depart_ecs_h_id
+    optimistic: true
+    min_value: 0
+    max_value: 23
+    step: 1
+    restore_value : true
+    initial_value : 6
+    unit_of_measurement: "h"
+    icon: "mdi:clock-edit-outline" # https://mdi.bessarabov.com/search/time
+    on_value:
+      then:
+        - script.execute: update_marche_forcee_status_id
+
+  - platform: template
+    name: "H1 Heure fin marche forcee ECS"
+    id: fin_ecs_h_id
+    optimistic: true
+    min_value: 0
+    max_value: 23
+    step: 1
+    restore_value : true
+    initial_value : 6
+    unit_of_measurement: "h"
+    icon: "mdi:clock-edit-outline" # https://mdi.bessarabov.com/search/time
+    on_value:
+      then:
+        - script.execute: update_marche_forcee_status_id
+
+wifi:
+  networks:
+  # les constantes préfixées par !secret sont définies dans le fichier local secrets.yaml
+  - ssid: !secret wifi_1_ssid
+    password: !secret wifi_1_password
+  # fallback network 2
+  #- ssid: "!secret wifi_2_ssid"
+  #  password: "!secret wifi_2_password"
+
+  # Enable fallback hotspot in case wifi connection fails
+  ap:
+    ssid: "sonoff-diverter-wifi-connect"
+    #password: "!secret wifi_fallback_ap_password"
+    ap_timeout: 10s
+
+captive_portal: # enable a captive portal fallback hotspot
+
