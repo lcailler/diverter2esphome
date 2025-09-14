@@ -1,4 +1,5 @@
 # Interface wifi web **autonome** ou **HA** pour **Diverter**
+Vous trouverez ici une configuration yaml pour esphome qui permet de prendre le controle d'un diverter via wifi.
 
 - [Introduction](#Introduction)
 - [Fonctionnalités](#Fonctionnalités)
