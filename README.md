@@ -26,7 +26,7 @@ Vous pouvez contrôler votre **diverter** depuis une interface **Web**. Elle aff
 ## Prérequis
 **Sonoff** ou tout autre appareil compatible **ESPHome**
 
-La configuration disponible ici est adaptée à un Sonoff Basic R2. [https://devices.esphome.io/devices/Sonoff-BASIC-R2-v1.4](https://devices.esphome.io/devices/Sonoff-BASIC-R2-v1.4)
+La configuration disponible ici est adaptée à un [Sonoff Basic R2](https://devices.esphome.io/devices/Sonoff-BASIC-R2-v1.4).
 Avec quelques adaptations **mineures**, vous pourrez adapter cette configuration.
 
 ---
