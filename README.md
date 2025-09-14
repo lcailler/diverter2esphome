@@ -22,7 +22,9 @@ Pour plus d'informations sur le **diverter**, veuillez suivre ce lien : [http://
 
 Vous pouvez contrôler votre **diverter** depuis une interface **Web**. Elle affichera les informations de puissance principales. Elle permet de prendre le **contrôle** de la marche forcée en programmant les plages horaires de marche forcée.
 
-<img src="https://raw.githubusercontent.com/lcailler/diverter2esphome/refs/heads/main/screenshot00.png" width="400">
+## Aperçu de l'interface web accessible en autonome
+
+<img src="https://raw.githubusercontent.com/lcailler/diverter2esphome/refs/heads/main/screenshot00.png" width="600">
 
 ---
 
@@ -35,6 +37,15 @@ Avec quelques adaptations **mineures**, vous pourrez adapter cette configuration
 ---
 
 ## Instructions d'installation
+
+### installation home
+
+Plusieurs façons pour installer esphome sur votre carte esp8266 ou autre. Cela peut être via home assistant mais aussi directement depuis votre pc.
+
+Concrètement, sous home assistant, ajouter le composant "ESPHome Device Builder", puis ouvrir "l'interface utilisateur web". Voici un guide : https://www.hacf.fr/esphome-introduction/
+
+
+### première mise sous tension :
 
 Pas d'obligation de renseigner vos paramètres Wi-Fi dans la configuration.
 Une fois flashé, si votre configuration Wi-Fi n'est pas faite, un hotspot Wi-Fi est activé. Connectez-vous sur ce hotspot et configurez votre Wi-Fi local, ssid et password.
