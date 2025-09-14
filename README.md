@@ -22,6 +22,8 @@ Pour plus d'informations sur le **diverter**, veuillez suivre ce lien : [http://
 
 Vous pouvez contrôler votre **diverter** depuis une interface **Web**. Elle affichera les informations de puissance principales. Elle permet de prendre le **contrôle** de la marche forcée en programmant les plages horaires de marche forcée.
 
+<img src="https://raw.githubusercontent.com/lcailler/diverter2esphome/refs/heads/main/screenshot00.png" width="400">
+
 ---
 
 ## Prérequis
@@ -36,3 +38,6 @@ Avec quelques adaptations **mineures**, vous pourrez adapter cette configuration
 
 Pas d'obligation de renseigner vos paramètres Wi-Fi dans la configuration.
 Une fois flashé, si votre configuration Wi-Fi n'est pas faite, un hotspot Wi-Fi est activé. Connectez-vous sur ce hotspot et configurez votre Wi-Fi local, ssid et password.
+
+
+
