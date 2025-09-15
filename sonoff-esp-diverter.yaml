@@ -81,8 +81,14 @@ switch:
     id: diverter_marche_force_on_id
     internal: false
     name: "marche forcee ECS activation"
+    on_state:
+      then:
+        - script.execute: message_display_manuel_script_id
+        - delay: 4s
+        - script.execute: update_marche_forcee_status_script_id
+
     data:
-      turn_on: "001_TRIAC_REQUEST_ON\n"   # recurrence of this messag is done below in time component
+      turn_on: "001_TRIAC_REQUEST_ON\n"   # recurrence of this message is done below in time component
       turn_off: "002_TRIAC_REQUEST_OFF\n"
 
 
@@ -173,14 +179,14 @@ time:
       - seconds: 0
         minutes: /1
         then:
-          - script.execute: update_marche_forcee_status_id
+          - script.execute: update_marche_forcee_status_script_id
 
   - platform: homeassistant
     id: esphome_time_id
 
 # Définition du script partagé
 script:
-  - id: update_marche_forcee_status_id
+  - id: update_marche_forcee_status_script_id
     then:
       - lambda: |-
               int current_hour = id(sntp_time_id).now().hour;
@@ -215,10 +221,14 @@ script:
               }
 
               if (is_on_time) {
-                id(diverter_marche_force_on_id).turn_on();
+                if (id(diverter_marche_force_on_id).state==0){
+                  id(diverter_marche_force_on_id).turn_on();
+                }
                 ESP_LOGD("time", "ON");
               } else {
-                id(diverter_marche_force_on_id).turn_off();
+                if (id(diverter_marche_force_on_id).state==1){
+                  id(diverter_marche_force_on_id).turn_off();
+                }
                 ESP_LOGD("time", "OFF");
               }
 
@@ -226,6 +236,12 @@ script:
               sprintf(s,"mode AUTO de %02dh00 a %02dh00, duree %dh",start_h,end_h,((end_h>start_h) ? (end_h-start_h): (24+end_h-start_h)) );
               id(marche_forcee_status_id).publish_state(s);
 
+  - id: message_display_manuel_script_id
+    then:
+      - lambda: |-
+              if (id(depart_ecs_h_id).state!=id(fin_ecs_h_id).state){
+                id(marche_forcee_status_id).publish_state("mode AUTO /!\\ régler H0=H1 pour basculer en mode MANUEL /!\\");
+              }
 
 sensor:
   - platform: template # Puissance réelle (compteur EDF), valeur moyenne sur la dernière minute
@@ -283,7 +299,9 @@ number:
     icon: "mdi:clock-edit-outline" # https://mdi.bessarabov.com/search/time
     on_value:
       then:
-        - script.execute: update_marche_forcee_status_id
+        - script.execute: message_display_manuel_script_id
+        - delay: 2s
+        - script.execute: update_marche_forcee_status_script_id
 
   - platform: template
     name: "H1 Heure fin marche forcee ECS"
@@ -298,7 +316,9 @@ number:
     icon: "mdi:clock-edit-outline" # https://mdi.bessarabov.com/search/time
     on_value:
       then:
-        - script.execute: update_marche_forcee_status_id
+        - script.execute: message_display_manuel_script_id
+        - delay: 2s
+        - script.execute: update_marche_forcee_status_script_id
 
 wifi:
   networks:
