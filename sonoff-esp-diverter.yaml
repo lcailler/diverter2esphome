@@ -81,8 +81,9 @@ switch:
     id: diverter_marche_force_on_id
     internal: false
     name: "marche forcee ECS activation"
-    data: "001_TRIAC_REQUEST_ON\n"
-    send_every: 41s
+    data:
+      turn_on: "001_TRIAC_REQUEST_ON\n"   # recurrence of this messag is done below in time component
+      turn_off: "002_TRIAC_REQUEST_OFF\n"
 
 
 output:
@@ -161,6 +162,12 @@ time:
           - uart.write:
               id: diverterUART_id
               data: "DIVERTER_GETJSON\n"
+          - if:
+              condition:
+                switch.is_on: diverter_marche_force_on_id
+              then:
+                - delay: 5s
+                - uart.write: "001_TRIAC_REQUEST_ON\n"
 
       # Every minute == CALCUL MARCHE FORCEE A PARTIR DE H0 H1 =========
       - seconds: 0
