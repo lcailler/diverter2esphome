@@ -11,7 +11,7 @@ Vous trouverez ici une configuration yaml pour esphome qui permet de prendre le 
 ## Introduction
 **Autonome** par défaut
 
-Cette solution vous permet de contrôler votre **diverter** directement via **Wi-Fi** en tant que composant autonome. Cette solution n'a pas besoin **d'Home Assistant**, mais si vous préférez, vous pouvez utiliser **Home Assistant**. Avec le composant **ESPHome**, l'ajout du composant sera automatique.
+Cette solution vous permet de contrôler votre **diverter** directement via **Wi-Fi** en tant que composant autonome. Cette solution n'a pas besoin **d'Home Assistant**, mais si vous préférez, vous pouvez utiliser **Home Assistant**. Avec le composant **ESPHome**, l'ajout du composant dans home assistant sera automatique.
 
 Pour plus d'informations sur le **diverter**, veuillez suivre ce lien : [http://wikinid.free.fr/wiki/Main/DiverterModule](http://wikinid.free.fr/wiki/Main/DiverterModule)
 
@@ -47,6 +47,12 @@ Concrètement, sous home assistant, ajouter le composant "ESPHome Device Builder
 ### flash du firmware
 
 Avec ESPHome flasher le firmware basé sur le fichier yaml suivant : sonoff-esp-diverter.yaml & secrets.yaml
+
+### cablage croisé
+
+Il vous faudra cabler ici les signaux tx, rx, gnd du sonoff sur le diverter. Il vous faudra relier le signal gnd entre eux. Puis le tx du sonoff au rx du diverter, le rx du sonoff sur le tx du diverter. On parle dans ce cas de cablage croisé.
+
+<img src="http://lionel.wiki.free.fr/download/projets/diverterV1_7_20190705/connect_diverter_03.png" width="400">
 
 ### première mise sous tension :
 
