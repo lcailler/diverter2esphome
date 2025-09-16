@@ -4,7 +4,7 @@ Vous trouverez ici une configuration yaml esphome pour le module **wifi** de vot
 - [Introduction](#Introduction)
 - [Fonctionnalités](#Fonctionnalités)
 - [Prérequis](#Prérequis)
-- [Instructions d'installation](#Instructions-d'installation)
+- [Instructions d'installation](#Instructions-installation)
 
 ---
 
@@ -41,7 +41,7 @@ Avec quelques adaptations **mineures**, vous pourrez adapter cette configuration
 
 ---
 
-## Instructions d'installation
+## Instructions installation
 
 ### installation esphome
 
