@@ -5,6 +5,7 @@ Vous trouverez ici une configuration yaml esphome pour le module **wifi** de vot
 - [Fonctionnalités](#Fonctionnalités)
 - [Prérequis](#Prérequis)
 - [Instructions d'installation](#Instructions-installation)
+- [Pour aller plus loin](Pour-aller-plus-loin)
 
 ---
 
@@ -49,9 +50,11 @@ Plusieurs façons pour installer esphome sur votre carte esp8266 ou autre. Cela 
 
 Concrètement, sous home assistant, ajouter le composant "ESPHome Device Builder", puis ouvrir "l'interface utilisateur web". Voici un guide : https://www.hacf.fr/esphome-introduction/
 
+Sur votre pc, vous trouverez un guide complet en suivant ce lien : https://peyanski.com/complete-esphome-installation-guide/
+
 ### flash du firmware
 
-Avec ESPHome flasher le firmware basé sur le fichier yaml suivant : sonoff-esp-diverter.yaml & secrets.yaml
+Avec ESPHome flasher le firmware basé sur les fichiers yaml suivants : sonoff-esp-diverter.yaml & secrets.yaml
 
 ### câblage croisé
 
@@ -69,4 +72,13 @@ Pas d'obligation de renseigner vos paramètres Wi-Fi dans la configuration.
 Une fois flashé, si votre configuration Wi-Fi n'est pas faite, un hotspot Wi-Fi est activé. Connectez-vous sur ce hotspot et configurez votre Wi-Fi local, ssid et password.
 
 
+## Pour aller plus loin
 
+Voici quelques raisons pour lesquels vous pourriez faire évoluer le yaml partagé ici :
++ si vous voulez ajouter d'autres automatismes,
++ supporter d'autres cartes compatibles ESPHome,
++ prendre le contrôle du relais présent par exemple sur le sonfoff basic
++ automatiser la mise à on/off du relais sur des seuils de production solaire, ou sur des plages horaires etc ....
++ ....
+
+https://esphome.io
