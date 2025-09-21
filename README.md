@@ -68,16 +68,16 @@ Autre détail technique, les signaux tx/rx du diverter sont compatibles signaux 
 
 ### première mise sous tension :
 
-Pas d'obligation de renseigner vos paramètres Wi-Fi dans la configuration.
-Une fois flashé, si votre configuration Wi-Fi n'est pas faite, un hotspot Wi-Fi est activé. Connectez-vous sur ce hotspot et configurez votre Wi-Fi local, ssid et password.
+Pas d'obligation de renseigner vos paramètres Wi-Fi dans la configuration yaml.
+Une fois flashée, si votre configuration Wi-Fi n'est pas faite, un hotspot Wi-Fi est activé. Connectez-vous sur ce hotspot et configurez votre Wi-Fi local, ssid et password.
 
 
 ## Pour aller plus loin
 
 Voici quelques raisons pour lesquels vous pourriez faire évoluer le yaml partagé ici :
-+ si vous voulez ajouter d'autres automatismes,
-+ supporter d'autres cartes compatibles ESPHome,
-+ prendre le contrôle du relais présent par exemple sur le sonfoff basic
++ si vous voulez ajouter un automatisme, esphome rend trés accessible ce type de chose.
++ supporter d'autres cartes compatibles ESPHome.
++ prendre le contrôle du relais présent sur le module wifi sonfoff basic.
 + automatiser la mise à on/off du relais sur des seuils de production solaire, ou sur des plages horaires etc ....
 + ....
 
