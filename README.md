@@ -30,7 +30,9 @@ Inversement, l'activation du mode AUTO sera effectif dés que la plage horaire s
 
 ## Aperçu de l'interface web accessible en autonome
 
+<p align="center">
 <img src="https://raw.githubusercontent.com/lcailler/diverter2esphome/refs/heads/main/screenshot00.png" width="600">
+</p>
 
 ---
 
@@ -39,6 +41,10 @@ Inversement, l'activation du mode AUTO sera effectif dés que la plage horaire s
 
 La configuration disponible ici est adaptée à un [Sonoff Basic R2](https://devices.esphome.io/devices/Sonoff-BASIC-R2-v1.4).
 Avec quelques adaptations **mineures**, vous pourrez adapter cette configuration a d'autres modules wifi. Vous trouverez la liste exhautive de plus de 200 modules wifi supportés en suivant ce lien : https://devices.esphome.io/standards/global.
+
+<p align="center">
+<img src="https://edn.com/electroschematics/wp-content/uploads/2019/04/2-Sonoff-Basic_Inside-T.jpg" width="500">
+</p>
 
 ---
 
