@@ -21,7 +21,7 @@ Pour plus d'informations sur le **diverter**, veuillez suivre ce lien : [http://
 ## Fonctionnalités
 **Remontée** d'infos, mode **AUTO** par programmation d'une **plage horaire** de marche forcée, mode **MANUEL** pour un contrôle manuel.
 
-Vous pouvez contrôler votre **diverter** depuis l'interface **Web**. Elle permet de rendre visible des grandeurs invisbles, elle affiche les informations de puissances produite, consommée ou perdue. En plus de sa fonction de "diverter", cette solution permet de prendre le **contrôle** de la marche forcée dans deux modes distincts : AUTO ou MANUEL.<br/>
+Vous pouvez contrôler votre **diverter** depuis l'interface **Web**. Elle permet de rendre visible des grandeurs invisbles, elle affiche les informations de puissances produite, consommée ou injectée. En plus de sa fonction de "diverter", cette solution permet de prendre le **contrôle** de la marche forcée dans deux modes distincts : AUTO ou MANUEL.<br/>
 + Le mode AUTO est un automatisme activable en programmant la plage horaire de votre choix. Sa durée devra être supérieure ou égale à 1 heure de mise en marche forcée.<br/>
 + Le mode MANUEL permet de positionner manuellement à on/off la marche forcée.
 
