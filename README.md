@@ -1,4 +1,4 @@
-# Interface wifi web **autonome** ou **HA** pour **Diverter**
+# Interface wifi pour **Diverter**
 Vous trouverez ici une configuration yaml esphome pour le module **wifi** de votre choix. Elle vous permettra, en plus des fonctions natives du **diverter**, d'ajouter son contrôle à distance directement depuis votre navigateur **web** préféré.
 
 - [Introduction](#Introduction)
