@@ -1,4 +1,4 @@
-# Interface wifi web **autonome** ou **HA** pour **Diverter**
+# Controler un **Diverter** avec son navigateur internet préféré
 Vous trouverez ici une configuration yaml esphome pour le module **wifi** de votre choix. Elle vous permettra, en plus des fonctions natives du **diverter**, d'ajouter son contrôle à distance directement depuis votre navigateur **web** préféré.
 
 - [Introduction](#Introduction)
@@ -28,7 +28,7 @@ Vous pouvez contrôler votre **diverter** depuis l'interface **Web**. Elle perme
 L'activation du mode MANUEL sera effectif dés que la plage horaire sera réglée pour durer 0 heure, H0=H1. Le mode AUTO sera ainsi désactivé, et le mode MANUEL prendra le relais.<br/>
 Inversement, l'activation du mode AUTO sera effectif dés que la plage horaire sera réglée pour une durée différente de 0 heure, H0<>H1.
 
-## Aperçu de l'interface web accessible en autonome
+## Aperçu de l'interface web produite par le module wifi
 
 <p align="center">
 <img src="https://raw.githubusercontent.com/lcailler/diverter2esphome/refs/heads/main/screenshot00.png" width="600">
@@ -75,7 +75,7 @@ Autre détail technique, les signaux tx/rx du diverter sont compatibles signaux 
 ### première mise sous tension :
 
 Pas d'obligation de renseigner vos paramètres Wi-Fi dans la configuration yaml.
-Une fois flashée, si votre configuration Wi-Fi n'est pas faite, un hotspot Wi-Fi est activé. Connectez-vous sur ce hotspot et configurez votre Wi-Fi local, ssid et password.
+Une fois flashée, si votre configuration Wi-Fi n'est pas faite, un hotspot Wi-Fi est activé. Connectez-vous sur ce hotspot et configurez votre Wi-Fi local, ssid et password. Si la led se met à clignoter régulièrement, cela indique que vous avez réussi à configurer correctement les paramètres wifi. Par contre, si la led reste alumée fixe sans clignoter, il vous faudra reprendre la configuration wifi. Attention, si le module wifi reste déconnecté du réseau wifi pendant plus de 2 minutes, le module se réinitialise en effecftuant un reset.
 
 
 ## Pour aller plus loin
